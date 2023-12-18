@@ -40,7 +40,7 @@ The findings provide valuable insights for researchers and practitioners in tail
 \end{abstract}
 
 \begin{IEEEkeywords}
-LSTM, Transformer
+LSTM, Transformer, Attention, Multi-Head Attention
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -57,13 +57,17 @@ While traditional activity recognition models often focus on unimodal inputs, th
 Overall, this paper will provide an overview of machine learning models developed for Human Activity Recognition(HAR) using smartphone sensor data. In particular, using accelerometer and gyroscope sensor data from a smartphone, this work was able to develop several machine learning models to classify human activity. 
 
 \section{Related Work}
-Human activity recognition (HAR) has garnered substantial attention in recent years, with a focus on leveraging multiple modes of sensor data to enhance accuracy and efficiency. Numerous studies have explored the potential of these sensor technologies in capturing and deciphering intricate human movements. \newline 
+In recent years, work surrounding Human Activity Recognition(HAR) has picked up pace. The focus has primarily been on leveraging multiple modes of sensor data to enhance accuracy and efficiency of the systems classifying/recognizing human activity. Numerous studies have explored the potential of these sensor technologies in capturing and deciphering intricate human movements. \newline 
 
-For instance, Reyes-Ortiz et al. (2016) focuses on developing an energy-efficient approach for human activity recognition using smartphones. The authors employ fixed-point arithmetic to enhance computational efficiency. The key findings of the research include the successful implementation of a smartphone-based activity recognition model with reduced energy consumption, demonstrating the feasibility of using smartphones for real-time activity monitoring. The methodology involves training support vector machine (SVM) classifiers with fixed-point arithmetic representations, showcasing a practical and energy-efficient solution. Results indicate promising classification accuracies for various physical activities. However, the study acknowledges certain limitations, such as the need for a balance between energy efficiency and classification accuracy and potential challenges in handling diverse real-world scenarios. Overall, the paper contributes valuable insights into optimizing smartphone-based activity recognition systems for practical deployment. \newline 
+The first work we will present is Reyes-Ortiz et al (2016). This work focuses on developing an energy-efficient approach for human activity recognition using smartphones. The key findings of the research include the successful implementation of a smartphone-based activity recognition model with reduced energy consumption, demonstrating the feasibility of using smartphones for real-time activity monitoring. The methodology involves training support vector machine (SVM) classifiers with fixed-point arithmetic representations, showcasing a practical and energy-efficient solution. Results indicate promising classification accuracies for various physical activities. However, the study acknowledges certain limitations, such as the need for a balance between energy efficiency and classification accuracy and potential challenges in handling diverse real-world scenarios. Overall, the paper contributes valuable insights into optimizing smartphone-based activity recognition systems for practical deployment. \newline
 
-Similarly, Ronao and Cho (2016) also presents a unique approach to human activity recognition. This study introduces a novel approach to human activity recognition (HAR) by employing deep convolutional neural networks (convnets) on smartphone accelerometer and gyroscope data. The methodology is characterized by its capacity to automatically extract pertinent and resilient features without intricate pre-processing or manual feature engineering. Notably, the experiments reveal the superiority of convnets over rival methods, achieving remarkable accuracy, especially in discerning intricate activities such as ascending and descending stairs. The investigation delves into the nuances of network architecture, filter size, and learning rate, elucidating their impacts on performance. Results underscore the efficacy of convnets in handling both raw sensor data and additional information from Fast Fourier Transform. While excelling in dynamic activity classification, the study recognizes that Support Vector Machines (SVM) outperform in discerning stationary activities. It also candidly addresses limitations, emphasizing the need for in-depth analysis of automatically derived features and potential enhancements with a more extensive dataset. Overall, this research contributes valuable insights to the realm of HAR, showcasing convnets as a promising avenue with noteworthy accomplishments and avenues for future exploration. \newline 
+Our work will build upon this work by achieving significant results using a limited dataset(i.e. Smartphone Sensor Data from only 30 participants and with only 128 readings in the time series data). This will address one of the limitations of the study by bringing us closer to achieving a balance between energy efficiency and classification accuracy. \newline 
 
+The next work we will present is Ronao and Cho (2016). This work presents quite a unique approach to human activity recognition. This study introduces a novel approach to human activity recognition (HAR) by employing deep convolutional neural networks (convnets) on smartphone accelerometer and gyroscope data. The methodology is characterized by its capacity to automatically extract pertinent and resilient features without intricate pre-processing or manual feature engineering. Notably, the experiments reveal the superiority of convnets over rival methods, achieving remarkable accuracy, especially in discerning intricate activities such as ascending and descending stairs. The investigation delves into the nuances of network architecture, filter size, and learning rate, analyzing their impacts on performance. Results underscore the efficacy of convnets in handling both raw sensor data and additional information from Fast Fourier Transform. While excelling in dynamic activity classification, the study recognizes that Support Vector Machines (SVM) outperform in discerning stationary activities. \newline 
 
+The study also candidly addresses limitations, emphasizing the need for in-depth analysis of automatically derived features and potential enhancements with a more extensive dataset. Overall, this research contributes valuable insights to the realm of HAR, showcasing convnets as a promising avenue with noteworthy accomplishments and avenues for future exploration. \newline 
+
+To improve upon this study, our work will primarily rely upon the attention mechanism to automatically derive features from the time series data. As we studied in class, when creating predictions, an attention layer in neural networks is used to selectively focus on various portions of the incoming data. The attention mechanism gives each input element a distinct weight rather than considering them all identically, enabling the model to prioritize crucial information and disregard unimportant details. This makes the model more effective in tasks involving sequential or structured data by enhancing its capacity to capture long-range dependencies and relationships within the incoming data.
 
 \section{Data/System Description}
 Smartphones are indispensable tools in our daily lives, enhancing communication and offering intelligent assistance through advanced technology. With a portable device containing computing capabilities and interconnectivity, smartphones provide application programming interfaces for third-party tools and applications. Beyond communication, they boast features like cameras, GPS, and web browsers, along with embedded sensors such as accelerometers and gyroscopes. These sensors enable the development of applications tailored to users' specific location, movement, and context.
@@ -357,8 +361,6 @@ In our implementation, we extended this concept to implement a Multi-Head Attent
 \textbf{\underline{Transformer}} \newline 
 The main reason why we were drawn to the Transformer model was the attention mechanisms within the Transformer model. Transformers employ attention mechanisms that allow the model to focus on different parts of the input sequence when making predictions. This is particularly beneficial for our Human Activity Recognition task, as certain parts of a sequence may be more relevant for recognizing specific activities. The attention mechanism helps the model dynamically weigh the importance of different time steps. Additionally, Transformers, via their attention mechanisms, are really adept in capturing long-range dependencies. \newline 
 
-The only cavaeat is that training Multi-Head Attention Layers within the Transformer Model often require a significant amount of data to converge to an optimal solution. In this dataset, we only have 30 subjects and overall roughly 7353 time series samples. Hence, we can say the amount of data is not enough to train the attention layer to converge to an optimal solution. 
-
 \begin{figure}[h!]
 	\includegraphics[width= 0.9 \linewidth]{imu_model.png}
 	\centering
@@ -366,22 +368,27 @@ The only cavaeat is that training Multi-Head Attention Layers within the Transfo
 	\label{imu_model.png}
 \end{figure}
 
+In developing the architecture of the Transformer model, we found a research paper, Reference [1], which had implemented a Transformer based model for Human Activity Recognition based on Inertial-Based Human Activity. Since our research questions also poses similar questions, we decided to implement the model from this paper to see if we could achieve similar results on our dataset! \newline 
+
 The Transformer Model architecture shown in Figure 17 was an idea taken from Reference [1]. The input is \underline{\textbf{Inertial Data}} which is a matrix of size $\mathbb{R}^{k \times 6}$. In our project case, since we had a total of 9 inertial signals, the input would be of size $\mathbb{R}^{k \times 9}$. \newline 
 
-The next step is to take the Raw Inertial Samples and Embed them in a Higher Dimension. To achieve this, we pass the raw inertial samples through a series of four 1D convolutions that are applied with GELU non-linearity. The end-result of this was to embed the raw data in a higher dimension $d$. Overall, the size of the output of this layer(i.e. $E_S$) should be $\mathbb{R}^{k \times d}$. \newline 
+The next step is to take the Raw Inertial Samples and Embed them in a Higher Dimension. To achieve this, we pass the raw inertial samples through a series of four 1D convolutions that are applied with GELU(Gaussian Error Linear Unit) non-linearity. The end-result of this was to embed the raw data in a higher dimension $d$. \newline 
 
-Let $C \in \mathbb{R}^{d}$ represent a class token that is prepended to $E_S$. Additionally, we learn an embedding $E_{P_i} \in \mathbb{R}^d$ for each Position $P_i$ in the sequence $E_S$. 
+
+In our opinion, we thought that this would be very useful as embedding time series data in higher dimensions would allow for a more expressive representation of the underlying patterns and structures in the data. These complex relationships and dependencies may not be apparent in lower dimensions. Furthermore, higher dimensional embeddings would be very useful in capturing non-linear relationships in the time series data. \newline 
+
+Overall, the size of the output of this layer(i.e. $E_S$) should be $\mathbb{R}^{k \times d}$. Let $C \in \mathbb{R}^{d}$ represent a class token that is prepended to $E_S$. Additionally, we learn an embedding $E_{P_i} \in \mathbb{R}^d$ for each Position $P_i$ in the sequence $E_S$. 
 
 
 $Z_0 = [C, E_S] + E_P \in \mathbb{R}^{t \times d}$
-where $t = k + 1$  
+where $t = k + 1$ .  
 
-We can treat $Z_0$ as the input to the Transformer Encoder. \newline 
+In our implementation, $d = 64$. Additionally, we can treat $Z_0$ as the input to the Transformer Encoder. \newline 
 
 \textbf{\underline{Transformer Encoder}} \newline 
-The Transformer Encoder is comprised of $L$ layers each of which are comprised of a Multi-Head Attention unit followed by a Feedforward Neural Network. \newline 
+The Transformer Encoder is comprised of $L$ layers each of which are comprised of a Multi-Head Attention unit followed by a Feedforward Neural Network. The Feedforward Neural Network has dimension of $2d$ with GELU(Gaussian Error Linear Unit) Non-linearity. \newline 
 
-The Feedforward Neural Network has dimension of $2d$ with GELU Non-linearity. \newline 
+In our implementation, we had 6 Transformer Encoder Layers where each Transformer Encoder Layer had a Multi-Head Attention unit with 8 Heads. \newline 
 
 \textbf{\underline{Multi-Head Attention}} \newline
 Normally, we would have three sequences be passed into a Multi-Head Attention Layer. We have a Query $Q \in \mathbb{R}^{t \times d}$, a Key $K \in \mathbb{R}^{t \times d}$, and a Value $V \in \mathbb{R}^{t \times d}$ \newline 
@@ -392,9 +399,7 @@ $Q_h = QW_h^Q \in \mathbb{R}^{t \times d'}$ \newline
 $K_h = KW_h^K \in \mathbb{R}^{t \times d'}$ \newline 
 $V_h = VW_h^V \in \mathbb{R}^{t \times d'}$ \newline 
 
-where $d' = \frac{d}{n_h}$ and $n_h$ represents the number of heads in the Multi-Head Attention Layer \newline 
-
-Evidently, we can treat the matrices $W_h^Q, W_h^K, W_h^V \in \mathbb{R}^{d \times d'}$ as linear projections from the $d$ dimensional space to the $d'$ dimensional space. When we use multi-head attention, we will concatenate the output from each "head" along the channel dimension(i.e. $d$). \newline 
+where $d' = \frac{d}{n_h}$ and $n_h$ represents the number of heads in the Multi-Head Attention Layer. In our case, $n_h = 8$ and $d = 64$. Hence, $d' = 8$. Evidently, we can treat the matrices $W_h^Q, W_h^K, W_h^V \in \mathbb{R}^{d \times d'}$ as linear projections from the $d$ dimensional space to the $d'$ dimensional space. When we use multi-head attention, we will concatenate the output from each "head" along the channel dimension(i.e. $d$). \newline 
 
 Note: In our case, since we are using self-Multi Head Attention, $Q, K, V$ would all represent the same input sequence! \newline 
 
@@ -412,7 +417,7 @@ Just as a review, Layer Normalization entails that we perform normalization acro
 To get the output of the Transformer Encoder Layer, we take $Y_C = Z_L[0] \in \mathbb{R}^d$ \newline
 
 \textbf{\underline{Classification Head}} \newline 
-$Y_C$ is provided as input to the Classification Head. First a Layer Normalization is done. Then, we do a Dense Layer with an output size of $d/4$. Then, we do a GELU Non-Linear Activation. Then, we do a Dropout Layer with 10 percent of the nodes dropped out. Finally, we do a Dense Layer with an output of 6 since we have 6 output classes in our system. 
+$Y_C$ is provided as input to the Classification Head. First a Layer Normalization is done. Then, we do a Dense Layer with an output size of $d/4$. Then, we do a GELU(Gaussian Error Linear Unit) Non-Linear Activation. Then, we do a Dropout Layer with 10 percent of the nodes dropped out. Finally, we do a Dense Layer with an output of 6 since we have 6 output classes in our system. 
 
 \section{Results}
 \begin{figure}[h!]
@@ -457,7 +462,7 @@ Based on Figure 18, which depicts the Confusion Matrix for LSTM Model Architectu
 	\label{LSTM(3)_Results.png}
 \end{figure}
 
-Based on the Figure 19, which depicts the Confusion Matrix for LSTM Model Architecture 3, Architecture 3 didn't seem to offer much improvement over the Sitting vs Standing Dilemma. Additionally, it seemed to worsen the prediction accuracy for Walking Upstairs Cases. However, for the other categories, it improved the classification accuracy. We believe this occurred because attention mechanisms, especially if the model is complex, can potentially lead to overfitting when the amount of data is limited. Our feeling is that the attention layer we had in this model did not generalize well. 
+Based on the Figure 19, which depicts the Confusion Matrix for LSTM Model Architecture 3, Architecture 3 didn't seem to offer much improvement over the Sitting vs Standing Dilemma. Additionally, it seemed to worsen the prediction accuracy for Walking Upstairs Cases. We believe this occurred because attention mechanisms, especially if the model is complex, can potentially lead to overfitting when the amount of data is limited. Our feeling is that the attention layer we had in this model did not generalize well. 
 
 \begin{figure}
     \centering
@@ -466,22 +471,21 @@ Based on the Figure 19, which depicts the Confusion Matrix for LSTM Model Archit
     \label{transformer_results.png}
 \end{figure}
 
-Based on Figure 20, which depicts the Confusion Matrix for the Transformer, it is evident that the Transformer performed poorly across the board. 
+Based on Figure 20, which depicts the Confusion Matrix for the Transformer, it is evident that the Transformer did not perform as well as the other models. We must remember that the major cavaeat with Transformer Models is that training Multi-Head Attention Layers within the Transformer Model often require a significant amount of data to converge to an optimal solution. In this dataset, we only have 30 subjects and overall roughly 7353 time series samples. Hence, we can say the amount of data is not enough to train the attention layer to converge to an optimal solution. 
+
 
 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width= 0.9 \linewidth]{results_IOT.png}
+    \includegraphics[width= 0.9 \linewidth]{results.png}
     \caption{Overall Accuracy Results}
-    \label{results_IOT.png}
+    \label{results.png}
 \end{figure}
 
 Based on Figure 21, which shows the overall accuracy results for all of our models, it is clear to see that the Baseline Models outperformed the Deep Learning Models. However, it is key to note that Logistic Regression and Linear SVC followed a different training process than the LSTM Models and Transformer Model. First and foremost, the LSTM Models and Transformer Model were trained mainly on raw sensor data[Note: Acceleration Data was split into Body + Gravitational Acceleration via Low Pass Filtration]. On the other hand, the Logistic Regression and Linear SVC Models were trained on preprocessed data. \newline 
 
-Another thing that we observed is that the LSTM Model accuracy increases proportionally with the number of LSTM/Attention Layers in the model. \newline 
-
-Finally, the results made it evident that the Transformer had the lowest accuracy among all the models. As discussed earlier within this work, this is most likely due to limited data to train all the attention layers within the Transformer.
+Finally, the results made it evident that, when we added attention layers to the LSTM Model, it made the accuracy worse. Furthermore, we can see that the Transformer had the lowest accuracy among all the models. As discussed earlier within this work, these observations are occurring, most likely, due to limited data to train all the attention layers within the Transformer.
 
 
 \section{Conclusion and Future Work}
