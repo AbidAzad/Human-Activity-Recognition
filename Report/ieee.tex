@@ -355,7 +355,9 @@ Based on these equations here, it is clear to see that the attention mechanism e
 In our implementation, we extended this concept to implement a Multi-Head Attention Layer. The mathematical concepts behind the Multi-Head attention layer have described, in more detail, in section 5.4. Please refer to that for the more-detailed description! \newline 
 
 \textbf{\underline{Transformer}} \newline 
-Training Multi-Head Attention Layers within the Transformer Model often require a significant amount of data to converge to an optimal solution. In this dataset, we only have 30 subjects and overall roughly 7353 time series samples. Hence, we can say the amount of data is not enough to train the attention layer to converge to an optimal solution. 
+The main reason why we were drawn to the Transformer model was the attention mechanisms within the Transformer model. Transformers employ attention mechanisms that allow the model to focus on different parts of the input sequence when making predictions. This is particularly beneficial for our Human Activity Recognition task, as certain parts of a sequence may be more relevant for recognizing specific activities. The attention mechanism helps the model dynamically weigh the importance of different time steps. Additionally, Transformers, via their attention mechanisms, are really adept in capturing long-range dependencies. \newline 
+
+The only cavaeat is that training Multi-Head Attention Layers within the Transformer Model often require a significant amount of data to converge to an optimal solution. In this dataset, we only have 30 subjects and overall roughly 7353 time series samples. Hence, we can say the amount of data is not enough to train the attention layer to converge to an optimal solution. 
 
 \begin{figure}[h!]
 	\includegraphics[width= 0.9 \linewidth]{imu_model.png}
