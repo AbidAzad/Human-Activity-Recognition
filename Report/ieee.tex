@@ -77,7 +77,15 @@ One notable application is Activity Recognition (AR), which involves monitoring 
 Human Activity Recognition (HAR) systems leverage raw sensor data collected from smartphones to analyze and interpret human movements. Various deep learning approaches are employed to develop models that accurately identify different human motions.
 
 
-With the  prospect of deciphering raw sensor data identify human movement, researchers have aggregated datasets that serve as authoritative repositories of information extracted from sensors embedded in smartphones. One particular dataset we are interested in this paper is the Human Activity Recognition (HAR) dataset from the UCI dataset storehouse. In this repository, data from 30 individuals—referred to as subjects—engaged in various activities with smartphones strapped to their waists is meticulously recorded. The sensors, armed with accelerometers and gyroscopes, capture the nuances of their movements. To add a layer of precision, the experiment is thoughtfully video recorded, allowing for manual labeling of the collected data.
+With the  prospect of deciphering raw sensor data identify human movement, researchers have aggregated datasets that serve as authoritative repositories of information extracted from sensors embedded in smartphones. One particular dataset we are interested in this paper is the Human Activity Recognition (HAR) dataset from the UCI dataset storehouse. In this repository, data from 30 individuals—referred to as subjects—engaged in various activities with smartphones strapped to their waists is meticulously recorded. The sensors, armed with accelerometers and gyroscopes, capture the nuances of their movements. To add a layer of precision, the experiment is thoughtfully video recorded, allowing for manual labeling of the collected data. \newline 
+
+
+\textbf{\underline{Training Data:}} \newline
+In our research initiative, we compiled a dataset with 9 Inertial Signals, crafting a time series for each in every experiment. With a 50 Hz sampling frequency over a 2.56-second interval, each time series yielded 128 data points. The comprehensive dataset comprises 7,352 samples of raw inertial signal data. Each sample encapsulates 9 Raw Inertial Signals, with each Raw Inertial Signal represented by a time series of 128 points. Regarding feature-engineered data, we obtained 7,352 samples, each containing 561 features. \newline
+
+\textbf{\underline{Test Data:}} \newline
+In the same research initiative, we  gathered a dataset of 9 Inertial Signals. Each experiment resulted in a time series for these signals, sampled at 50 Hz over 2.56 seconds, generating 128 data points per series. The raw inertial signal data comprises 2,947 samples, with each sample containing 9 Raw Inertial Signals, and each Raw Inertial Signal represented by a time series of 128 points. Regarding feature-engineered data, we obtained 2,947 samples, each with 561 features.
+\newline
 
 Given the density of this particular dataset, the central question guiding this exploration is: Can machine learning models be developed to actively identify and interpret human activity with precision?
 
@@ -234,7 +242,9 @@ The visualizations distinctly illustrate the distribution patterns between Stati
 	\label{boxplot_acc_magnitude_mean.png}
 \end{figure}
 
-Analyzing the nuanced patterns unveiled by the box plot reveals valuable distinctions. A tAccMean below -0.8 predominantly corresponds to stationary activities like Standing, Sitting, or Laying. Conversely, when tAccMean exceeds -0.6, it signals dynamic activities such as Walking, Walking Downstairs, or Walking Upstairs. Moreover, a tAccMean surpassing 0.0 specifically characterizes the activity as Walking Downstairs. While achieving a commendable 75\% classification accuracy for activity labels, there remains a margin for error. The consideration of Gravity Acceleration Components adds an additional layer of relevance to the classification task. Thus, revisiting the plots with respect to these components may yield further insights.
+Analyzing the nuanced patterns unveiled by the box plot reveals valuable distinctions. A tAccMean below -0.8 predominantly corresponds to stationary activities like Standing, Sitting, or Laying. Conversely, when tAccMean exceeds -0.6, it signals dynamic activities such as Walking, Walking Downstairs, or Walking Upstairs. Moreover, a tAccMean surpassing 0.0 specifically characterizes the activity as Walking Downstairs.
+
+While achieving a commendable 75\% classification accuracy for activity labels, there remains a margin for error. It is important to note that threshold lines were strategically added to divide the data, providing a clearer view of the distinctions between activity categories. The consideration of Gravity Acceleration Components adds an additional layer of relevance to the classification task. Thus, revisiting the plots with respect to these components may yield further insights.
 
 \begin{figure}[h!]
 	\includegraphics[width= 1.0 \linewidth]{mean_body_gyroscope_x.png}
@@ -426,6 +436,7 @@ $Y_C$ is provided as input to the Classification Head. First a Layer Normalizati
 	\caption{Linear SVC Results}
 	\label{linearSVC.png}
 \end{figure}
+In reference to Figure 14, portraying the Confusion Matrix for the Linear SVC Model, it becomes apparent that the performance of this architecture is remarkably high. Notably, the model exhibits an outstanding ability to differentiate activities, with only an exceedingly rare occurrence of confusion between Standing and Sitting Down. This infrequent misclassification is understandable given the inherent similarity in sensor readings during these stationary activities. Beyond this rare instance, the model consistently demonstrates precise identification across all other categories.
 
 \begin{figure}[h!]
 	\includegraphics[width= 0.9 \linewidth]{logisticRegression.png}
@@ -433,8 +444,7 @@ $Y_C$ is provided as input to the Classification Head. First a Layer Normalizati
 	\caption{Logistic Regression Results}
 	\label{logisticRegression.png}
 \end{figure}
-
-
+The examination of the Confusion Matrix Model for Logistic Regression in Figure 16 reveals consistent results, indicating that the data exhibits linear separability and performs exceptionally well under models of this nature. In summary, our baseline models demonstrate effective performance, establishing themselves as valuable benchmarks for our deep learning models.
 \begin{figure}[h!]
 	\includegraphics[width= 0.9 \linewidth]{LSTM(1)_Results.png}
 	\centering
@@ -497,9 +507,23 @@ The divergence in training processes between Neural Network models and baseline 
 
 The direct correlation observed between the accuracy of the LSTM model and the number of LSTM/Attention Layers emphasizes the importance of model architecture. More complex models, with a greater number of layers, were better equipped to capture intricate temporal dependencies within sequential sensor data. This underscores the need for careful consideration of model architecture based on the nature of the data and the complexity of underlying patterns.
 
+In considering future work, there are several avenues for exploration and improvement based on the insights gained from this analysis:
+
+1. \textbf{Model Refinement:} Future research could focus on refining the architecture of the Transformer model, addressing the challenges associated with training attention layers effectively. This may involve experimenting with different configurations and techniques to enhance the model's performance on the specific nature of the Human Activity Recognition (HAR) dataset.
+
+2. \textbf{Data Augmentation:} Given the limited volume of data in the HAR dataset, exploring data augmentation techniques could be beneficial. Augmenting the dataset with variations of existing samples could potentially improve the generalization ability of more complex models, such as the Transformer.
+
+3. \textbf{Feature Engineering:} Investigating additional features or representations that capture subtle patterns in raw sensor readings might enhance the performance of baseline models. Feature engineering tailored to the unique characteristics of the dataset could contribute to better model understanding and accuracy.
+
+4. \textbf{Ensemble Approaches:} Considering ensemble methods that combine predictions from multiple models may lead to improved overall performance. Combining the strengths of different models, especially baseline models and more complex neural network models, could mitigate the limitations of individual approaches.
+
+5. \textbf{Data Diversity:} Collecting and incorporating additional diverse data into the HAR dataset may contribute to better model generalization. A more extensive and varied dataset could aid in training attention mechanisms effectively within complex models like the Transformer.
+
+6. \textbf{Interpretability and Explainability:} Given the superior robustness exhibited by baseline models, future work could delve into enhancing the interpretability of more complex models. Developing methods to interpret and explain the decisions made by models like the Transformer may improve their trustworthiness in real-world applications.
+
+By exploring these areas, researchers and practitioners can advance the field of Human Activity Recognition and tailor models to better meet the demands of real-world scenarios.
+
 In conclusion, the unexpected findings underscore the nuanced relationship between model complexity, dataset characteristics, and preprocessing steps. The optimal choice of a model for HAR depends on the intricacies of the dataset, and the findings highlight the importance of aligning model selection with the specific requirements and constraints of the task at hand. The analysis provides valuable insights for researchers and practitioners in tailoring HAR systems to real-world scenarios, where data availability and interpretability are crucial considerations.
-
-
 
 
 \section*{Acknowledgment}
