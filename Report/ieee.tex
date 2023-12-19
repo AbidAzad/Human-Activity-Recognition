@@ -495,7 +495,7 @@ Based on Figure 20, which depicts the Confusion Matrix for the Transformer, it i
 
 Based on Figure 21, which shows the overall accuracy results for all of our models, it is clear to see that the Baseline Models outperformed the Deep Learning Models. However, it is key to note that Logistic Regression and Linear SVC followed a different training process than the LSTM Models and Transformer Model. First and foremost, the LSTM Models and Transformer Model were trained mainly on raw sensor data[Note: Acceleration Data was split into Body + Gravitational Acceleration via Low Pass Filtration]. On the other hand, the Logistic Regression and Linear SVC Models were trained on preprocessed data. \newline 
 
-Finally, the results made it evident that, when we added attention layers to the LSTM Model, it made the accuracy worse. Furthermore, we can see that the Transformer had the lowest accuracy among all the models. As discussed earlier within this work, these observations are occurring, most likely, due to limited data to train all the attention layers within the Transformer.
+Finally, the results made it evident that, when we added attention layers to the LSTM Model, it made the accuracy worse. Furthermore, we can see that the Transformer had the lowest accuracy among all the models. As discussed earlier within this work, these observations are occurring, most likely, due to limited data to train all the attention layers.
 
 
 \section{Conclusion and Future Work}
